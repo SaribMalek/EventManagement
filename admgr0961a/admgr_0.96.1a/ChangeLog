@@ -1,0 +1,86 @@
+2001-04-12  cfrank
+	* admin.lib:
+	* admin.ph:
+		Added 'rebuild hit/click' option
+		Added 'optimize databases' option
+
+2001-04-11  cfrank
+	* INSTALL:
+		Updated to include instructions on how to specify ad class to
+		be displayed
+
+	* BUGS.imgsize.class:
+	* INSTALL:
+	* LICENSE:
+	* admin.css:
+	* admin.lib:
+	* admin.ph:
+	* adredir.ph:
+	* ads.cfg:
+	* ads.lib:
+	* ads.struct:
+	* dev/adshow.ph:
+	* edit.ad.ph:
+	* edit.domain.ph:
+	* imgsize.class:
+		Changed all CR/LF to UNIX LF
+
+	* imgsize.class:
+		Added version 1.01b
+
+	* admin.css:
+	* admin.ph:
+	* adredir.ph:
+		Cleaned up code
+
+	* BUGS.imgsize.class:
+		from ImgSize v1.02b distribution
+
+	* ads.lib:
+		Added qpe() function to quick escape strings for MySQL
+		Cleaned up code
+
+	* ads.cfg:
+		Cleaned up and added more comments
+
+	* BUGS.imgsize.class:
+		No more bugs in ImgSize
+
+	* imgsize.class:
+		Updated to ImgSize v1.02b - includes new PSD support and fixes
+		problem with OS/2 bmp files
+
+	* admin.lib:
+	* ads.cfg:
+		Cleaned up
+
+	* BUGS.imgsize.class:
+	* imgsize.class:
+		Added from imgsize.class distribution
+
+	* imgsize.class:
+		Removed
+
+	* edit.ad.ph:
+	* edit.domain.ph:
+		Cleaned up code and moved functions to library
+
+	* imgsize.class:
+		Updated to version 1.03b
+
+	* admin.lib:
+	* admin.ph:
+	* adredir.ph:
+	* ads.lib:
+	* edit.ad.ph:
+	* edit.domain.ph:
+	* imgsize.class:
+		Update License/Copyright Information
+
+	* admin.lib:
+		Fixed getimgsize() to handle errors from the ImgSize class correctly
+		Cleaned up code
+
+	* INSTALL:
+		Added requirements
+

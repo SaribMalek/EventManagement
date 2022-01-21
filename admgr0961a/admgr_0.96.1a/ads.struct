@@ -1,0 +1,61 @@
+CREATE TABLE ads (
+    adid	        INT(6) UNSIGNED ZEROFILL AUTO_INCREMENT NOT NULL,
+    groupid         INT(6) UNSIGNED ZEROFILL NOT NULL,
+    class           INT(2) UNSIGNED NOT NULL,
+	title		    VARCHAR(50),
+	banner		    VARCHAR(255),
+    width           INT(4),
+    height          INT(4),
+	url		        VARCHAR(255),
+    textad          VARCHAR(255),
+    textadurl       VARCHAR(255),
+    trackingurl     VARCHAR(255),
+	logfile		    VARCHAR(255),
+    logtype         SET('hits','clicks'),
+	hits		    INT(8) UNSIGNED,
+	clicks		    INT(8) UNSIGNED,
+    priority        ENUM('1','2','3') DEFAULT '2',
+    domains         TINYTEXT,
+
+    createdate      DATETIME NOT NULL,
+    modifydate      DATETIME NOT NULL,
+    expiredate      DATETIME NOT NULL,
+
+    lastdisplay     DATETIME NOT NULL,
+    statsreset      DATETIME NOT NULL,
+
+	notes		    TEXT,
+	active		    CHAR(1),
+	KEY adid (adid),
+	PRIMARY KEY (adid)
+);
+
+CREATE TABLE adlog (
+    adid            INT(6) UNSIGNED ZEROFILL NOT NULL,
+    type            ENUM('hit','click'),
+    remotehost      VARCHAR(64) NOT NULL,
+    remoteaddr      VARCHAR(20) NOT NULL,
+    entrydate       DATETIME,
+    site            VARCHAR(35),
+
+    KEY adid (adid),
+    KEY type (type),
+    KEY site (site),
+    KEY entrydate (entrydate)
+);
+
+CREATE TABLE domains (
+    domainid        INT(6) UNSIGNED ZEROFILL AUTO_INCREMENT NOT NULL,
+    name            VARCHAR(64) NOT NULL,
+    redir           VARCHAR(128) NOT NULL,
+    logpath         VARCHAR(128) NOT NULL,
+
+    modifydate      DATETIME,
+
+    notes           TEXT,
+    active          ENUM('Y','N','P','D'),
+
+    KEY domainid (domainid),
+    KEY active (active)
+);
+

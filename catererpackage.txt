@@ -1,0 +1,58 @@
+caterer packages 
+
+	31st Pacakages
+	birthday packages
+	marriage packages
+	anniversary packages
+	engadgement packages
+	
+category
+	add / remove category
+
+
+package
+	add / Remove and Edit Package
+
+	package fields :-
+		package name
+		food description
+		item contains :- values
+		         	Veg Pulaw
+					Puri
+					Plain Rice
+					Fruit Salad
+					Curd
+					Papad
+					Dal Rice
+		category
+		item image
+		size
+		status
+		suitable for no of people
+		price
+
+table
+
+	event mane
+	total No Of table
+	Chair with One table
+	
+add food
+
+compony add
+
+	compony name
+	compony address
+	contact no
+	email id
+	image
+	
+compony advertiesment
+
+	compony name
+	compony email
+	compony contact no
+	compony image
+	compony description
+	compony specialize
+	Reviews

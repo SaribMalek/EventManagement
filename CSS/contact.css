@@ -1,0 +1,283 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+.content{
+	margin: 0;
+	padding: 0;
+}
+.img{
+	height: 350px;
+	width: 100%;
+}
+.menu-bar{
+	width: 100%;
+	/*padding: 10px;*/
+}
+.menu-bar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+ /* background-color: blue;*/
+}
+
+.menu-bar ul li {
+  float: left;
+}
+
+.menu-bar ul li a {
+  display: block;
+  color: blue;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: all 0.5s ease-in;
+}
+
+.menu-bar ul li a:hover{
+  /*background-color: lightblue;*/
+  color: black;
+  border-bottom: 2px solid red;
+}
+
+.menu-bar ul li.last-child{
+	float: right;
+}
+
+/*.menu-bar ul li a::before {
+  content: "";
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+  right: 50%;
+  left: 50%;
+  bottom: 0;
+  height: 2px;
+  background-color: #e74c3c;
+}
+
+.menu-bar ul li a:hover::before {
+  right: 0;
+  left: 0;
+}
+
+.menu-bar ul li a.active {
+  background-color: lightblue;
+}*/
+
+
+
+/* Menu-bar CSS End here 
+
+/*.main-content{
+	margin: 30px;
+	height: 230px;
+}
+
+.main-content h3{
+	text-align: center;
+	font-size: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-content .main{
+	height: 200px;
+	float: left;
+	width: 50%;
+	background-color: lightblue;
+}
+
+.main-content .main p{
+	text-align: center;
+	padding-top: 30px;
+}
+
+.main-content .main img{
+	padding: 20px;
+	height: 150px;
+	width: 40%;
+	padding-right: 10px;
+	border-radius: 20%;	
+}*/
+
+/* contact Form CSS Start */
+
+.contact-content{
+	margin: 0;
+	/*padding: 5;*/ 
+	box-sizing: border-box;
+	width: 100%;
+	height: 480px;
+	/*background-color: lightblue;*/
+}
+
+.contact-content .contact-main{
+	box-sizing: border-box;
+	margin: 20px;
+	float: left;
+	height: 450px;
+	width: 100%;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.contact-content .contact-main h3{
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.contact-content .contact-main span{
+	margin-bottom: 20px;
+}
+
+
+.contact-content .contact-main input[type='text'], textarea{
+	width: 95%;
+	padding: 6px;
+}
+
+.btnsubmit{
+	text-align:center;
+}
+
+.btnsubmit input[type='submit']{
+	height: 30px;
+	width: 20%;
+	background-color: blue;
+	color: white;
+	border: 1px solid white;
+	font-size: 15px;
+	transition: all 0.7s ease-in;
+}
+
+.btnsubmit input[type='submit']:hover{
+	background-color: white;
+	color: blue;
+	border: 1px solid blue;
+}
+
+/* contact Form CSS End */
+
+
+/* Subscribe section CSS Start */
+
+.subscribe-content{
+	margin: 30px;
+	text-align: center;
+	height: 200px;
+	width: auto;
+	background-color: rgb(120, 120, 120);
+	border-radius: 10px;
+}
+
+.subscribe-content .subscribe{
+	padding-top: 25px;
+}
+.subscribe-content .subscribe h2{
+	color: white;
+}
+
+.subscribe-content .subscribe input[type='text']{
+	width: 30%;
+	height: 30px;
+	border-radius: 20px;
+	border: none;
+	padding-left: 30px;
+}
+
+.subscribe-content .subscribe input[type='submit']{
+	height: 30px;
+	width: 10%;
+	border-radius: 20px;
+	border: none;
+	background-color: red;
+	color: white;
+}
+.subscribe-content .subscribe input[type='submit']:hover{
+	color: red;
+	background-color: white;
+	border: 1px solid red; 
+}
+
+/* Subscribe section CSS End */
+
+/* footer left side */
+
+footer{
+	height: 230px;
+	margin: 30px;
+	background-color: black;
+	color: white;
+	border-radius: 10px;
+}
+
+.fot-content{
+	float: left;
+	width: 50%;
+	text-align: center;
+}
+
+.fot-content h3{
+	font-family: Arial;
+	font-size: 25px;
+}
+
+.fot-content ul li{
+	list-style-type: none;
+	padding-bottom: 10px;
+}
+
+.fot-content ul li a{
+	text-decoration: none;
+	color: white;
+	font-size: 15px;
+	font-family: Arial;
+	transition: all 0.4s ease;
+}
+
+.fot-content ul li a:hover{
+	margin-left: 10px;
+	color: #F5F5F5;
+}
+
+/* Footer right Side */
+
+.fot-content-right{
+	float: left;
+	width: 50%;
+	text-align: center;
+}
+
+.fot-content-right h3{
+	font-family: Arial;
+	font-size: 25px;
+}
+
+.fot-content-right ul li{
+	display: inline;
+	list-style-type: none;
+	padding-bottom: 10px;
+}
+
+.fot-content-right ul li a{
+	text-decoration: none;
+	padding: 10px;
+	color: white;
+	font-size: 15px;
+	font-family: Arial;
+	transition: all 0.4s ease;
+}
+
+.fot-content-right ul li a i{
+	font-size: 20px;
+	color: white;
+	padding-top: 10px;
+	height: 30px;
+	width: 40px;
+	border-radius: 50%;
+	background-color: rgba(255,255,255,0.2);
+}
+
+.fot-content-right ul li a i:hover{
+	color: #24262b;
+	background-color: white;
+}

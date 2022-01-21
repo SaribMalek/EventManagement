@@ -1,0 +1,528 @@
+<?php
+
+/////////////////////////////////////////////////////////////////////////////////
+//
+//  PHP Ad Manager
+//  Copyright (c) 2001, Digitek Design/Chris Allen
+//  http://www.digitekdesign.com/software/
+//  http://admgr.sourceforge.net/
+//  Email: development@digitekdesign.com
+//
+//  This program is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//
+/////////////////////////////////////////////////////////////////////////////////
+
+// PHP Ad Manager Library Routines
+
+//////////////////////////////////////////////////////////////////////////////////
+// show_domains() - displays the main menu
+//
+// Parameters:      none
+//
+
+function show_menu() {
+?>
+<B>Main Menu</B><BR><BR>
+<table cellpadding="2" cellspacing="0" border="1" width="75%">
+<tr>
+    <td width="33%">
+        Advertising Items
+    </td>
+    <td>
+        <a href="admin.ph?view=newad">Create New Ad</a><br>
+        <a href="admin.ph?view=editad">Browse/Edit Ads</a><br>
+        <a href="admin.ph?view=newadgroup">Create New Ad Group</a><br>
+        <a href="admin.ph?view=editadgroup">Browse/Edit Ad Groups</a><br>
+    </td>
+</tr>
+</table>
+
+<br>
+
+<table cellpadding="2" cellspacing="0" border="1" width="75%">
+<tr>
+    <td width="33%">
+        Domains
+    </td>
+    <td>
+        <a href="admin.ph?view=newdomain">Create New Domain</a><br>
+        <a href="admin.ph?view=editdomain">Browse/Edit Domains</a><br>
+    </td>
+</tr>
+</table>
+
+<br>
+
+<table cellpadding="2" cellspacing="0" border="1" width="75%">
+<tr>
+    <td width="33%">
+        Users
+    </td>
+    <td>
+        <a href="admin.ph?view=newuser">Add New User</a><br>
+        <a href="admin.ph?view=edituser">Browse/Edit Users</a><br>
+    </td>
+</tr>
+</table>
+
+<br>
+
+<table cellpadding="2" cellspacing="0" border="1" width="75%">
+<tr>
+    <td width="33%">
+        Maintenance
+    </td>
+    <td>
+        <a href="admin.ph?view=editconfig">Edit Main Configuration</a><br>
+        <a href="admin.ph?view=buildhc">Rebuild Hit/Click Counts</a><br>
+        <a href="admin.ph?view=optdb">Optimize Databases</a><br>
+        <a href="admin.ph?view=arclogs">Archive Logs</a><br>
+    </td>
+</tr>
+</table>
+<?php
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// show_ads() - displays a HTML table of the ad items
+//
+// Parameters:      none
+//
+
+function show_ads() {
+    global $sort;
+
+    if (empty($sort)) { $sort = "title"; }
+
+    ad_connect_db();
+
+    showdoconfirm();
+
+    print "<CENTER><B>Advertising Items</B><P></P>\n";
+
+    // Display Ads
+    print "<table width=600 cellpadding=1 align=center><tr bgcolor=800000>\n";
+    print "<td width=200 align=left><a href=\"admin.ph?view=editad&sort=".colsort("title",$sort)."\">Title</a></td>\n";
+    print "<td width=50 align=left><a href=\"admin.ph?view=editad&sort=".colsort("hits",$sort)."\">Hits</a></td>\n";
+    print "<td width=50 align=left><a href=\"admin.ph?view=editad&sort=".colsort("clicks",$sort)."\">Clicks</a></td>\n";
+    print "<td width=50 align=left></td>\n";        // Reset Stats
+    print "<td width=50 align=left></td>\n";        // View Log
+    print "<td width=50 align=left></td>\n";        // Toggle Active
+    print "<td width=30 align=left></td>\n";        // Edit
+    print "<td width=30 align=left></td><tr>\n";    // Delete
+
+    $qh = ad_query("select * from ads order by $sort,title");
+    $nr = ad_queryrows($qh);
+
+    $ct = 0;
+    if ($nr > 0) {
+
+        while ($nr > $ct) {
+            $ad = ad_fetch($qh);
+            print "<tr><td class=\"small\">$ad[title]</td>\n";
+            print "<td class=\"small\">$ad[hits]</td>\n";
+            print "<td class=\"small\">$ad[clicks]</td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=resetstats&id=$ad[adid]\" onClick=\"return doConfirm()\">Reset Stats</A></td>\n";
+            print "<td class=\"small\">\n";
+
+            $ad[logfile] = trim($ad[logfile]);
+            if (!empty($ad[logfile])) {
+                print "<a href=\"admin.ph?view=log&id=$ad[adid]\">View Log</A>";
+            }
+            print "</td>\n<td class=\"small\"><a href=\"admin.ph?view=editad&activate=$ad[adid]\">";
+            if ($ad[active] == 'N') { print "Activate"; } else { print "DeActivate"; }
+            print "</A></td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=editad&edit=$ad[adid]\">Edit</A></td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=editad&delete=$ad[adid]\" onClick=\"return doConfirm()\">Delete</A></td>\n";
+            print "</tr>\n";
+            $ct++;
+        }
+    } else {
+        print "<tr><td colspan=\"7\" align=\"center\">No advertising items</td></tr>";
+    }
+    print "</table>\n";
+    print "<FORM ACTION=\"admin.ph\"><DIV ALIGN=\"CENTER\"><INPUT TYPE=\"HIDDEN\" VALUE=\"resetstats\" NAME=\"view\"><INPUT TYPE=\"SUBMIT\" VALUE=\"Reset all stats\" ONCLICK=\"return doConfirm()\"></DIV></FORM>";
+    print "<FORM ACTION=\"admin.ph\"><DIV ALIGN=\"CENTER\"><INPUT TYPE=\"SUBMIT\" VALUE=\"Main Menu\"></DIV></FORM>";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// show_domains() - displays a HTML table of the domains
+//
+// Parameters:      none
+//
+
+function show_domains() {
+    global $sort;
+    if (empty($sort)) { $sort = "name"; }
+    ad_connect_db();
+
+    showdoconfirm();
+
+    print "<CENTER><B>Domains</B><P></P>\n";
+
+    // Display Domains
+
+    print "<table width=600 align=center><tr bgcolor=800000>\n";
+    print "<td width=200 align=left><a href=\"admin.ph?view=editdomain&sort=".colsort("name",$sort)."\">Domain</a></td>\n";
+    print "<td width=50 align=left></td>\n";        // Toggle Active
+    print "<td width=30 align=left></td>\n";        // Edit
+    print "<td width=30 align=left></td><tr>\n";    // Delete
+
+    $qh = ad_query("select * from domains order by $sort,name");
+    print mysql_error();
+    $nr = ad_queryrows($qh);
+
+    $ct = 0;
+    if ($nr > 0) {
+        while ($nr > $ct) {
+            $d = ad_fetch($qh);
+            print "<tr><td class=\"small\">$d[name]</td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=editdomain&activate=$d[domainid]\">";
+            if ($d[active] == 'N') { print "Activate"; } else { print "DeActivate"; }
+            print "</A></td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=editdomain&edit=$d[domainid]\">Edit</A></td>\n";
+            print "<td class=\"small\"><a href=\"admin.ph?view=editdomain&delete=$d[domainid]\" onClick=\"return doConfirm()\">Delete</A></td>\n";
+            print "</tr>\n";
+            $ct++;
+        }
+    } else {
+        print "<tr><td colspan=\"7\" align=\"center\">No domains defined</td></tr>";
+    }
+    print "</table>\n";
+    print "<FORM ACTION=\"admin.ph\"><DIV ALIGN=\"CENTER\"><INPUT TYPE=\"SUBMIT\" VALUE=\"Main Menu\"></DIV></FORM>";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// delete($tbl,$col,$id) - deletes a record from the database
+//
+// Parameters:      tbl     - MySQL table
+//                  col     - Name of ID column
+//                  id      - Id to delete
+//
+
+function delete($tbl,$col,$id) {
+    ad_connect_db();
+    ad_query("delete from $tbl where $col = '$id'");
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// toggle_active($tbl,$col,$id) - toggles the active flag between 'Y' and 'N'
+//
+// Parameters:      tbl     - MySQL table
+//                  col     - Name of ID column
+//                  id      - Id to toggle
+
+function toggle_active($tbl,$col,$id) {
+    ad_connect_db();
+    $qh = ad_query("select active from $tbl where $col = '$id'");
+    $ad = ad_fetch($qh);
+    if ($ad[active] == 'Y') { $a = 'N'; } else { $a = 'Y'; }
+    ad_query("update $tbl set active='$a' where $col = '$id'");
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// listads($curr)
+//
+// Parameters:      curr    - array containing ad ids
+//
+
+function listads($curr=array()) {
+    ad_connect_db();
+    $qh = ad_query("select * from ads order by title");
+    $nr = ad_queryrows($qh);
+    print "<SELECT MULTIPLE NAME=\"ads[]\" SIZE=4>\n";
+    print "<OPTION ";
+    if (empty($curr[0])) print "SELECTED ";
+    print "VALUE=\"\">--All Ad Items--</OPTION>\n";
+    $ct = 0;
+    while ($ct < $nr) {
+        $d = ad_fetch($qh);
+        print "<OPTION ";
+        if (in_array($d[adid],$curr)) print "SELECTED ";
+        print "VALUE=\"$d[adid]\">$d[title]</OPTION>\n";
+        $ct++;
+    }
+    print "</SELECT>\n";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// listdomains($curr)
+//
+// Parameters:      curr    - array containing domain ids
+//
+
+function listdomains($curr=array()) {
+    ad_connect_db();
+    $qh = ad_query("select * from domains order by name");
+    $nr = ad_queryrows($qh);
+    print "<SELECT MULTIPLE NAME=\"domains[]\" SIZE=4>\n";
+    print "<OPTION ";
+    if (empty($curr[0])) print "SELECTED ";
+    print "VALUE=\"\">--All Domains--</OPTION>\n";
+    $ct = 0;
+    while ($ct < $nr) {
+        $d = ad_fetch($qh);
+        print "<OPTION ";
+        if (in_array($d[domainid],$curr)) print "SELECTED ";
+        print "VALUE=\"$d[domainid]\">$d[name]</OPTION>\n";
+        $ct++;
+    }
+    print "</SELECT>\n";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// viewlog($id,$size)
+//
+// Parameters:      id      - ad id number
+//                  size    - size (in bytes) of log chunk to display (from the end)
+//
+
+function viewlog($id,$size="") {
+    global $ad_logpath_default;
+
+    ad_connect_db();
+
+    $qh = ad_query("select title,logfile from ads where adid = '$id'");
+    if (ad_queryrows($qh) <= 0) return;
+    list($title,$logfile) = ad_fetch($qh);
+
+    print "<CENTER><B>View Log for $title</B></CENTER>\n";
+    print "<BR><BR><DIV ALIGN=\"LEFT\"><CODE><PRE>\n";
+
+    if (!is_readable($ad_logpath_default."/".$logfile)) {
+        print "</PRE></CODE><CENTER>Log File Not Found</CENTER>\n";
+        return;
+    }
+
+    $fp = fopen($ad_logpath_default."/".$logfile,"r");
+    if (!empty($size)) {
+        $size = $size * -1;
+        fseek($fp,$size,SEEK_END);
+    }
+    while (!feof($fp)) {
+        $t = fgets($fp,128);
+        print $t;
+    }
+    print "</PRE></CODE></DIV>\n";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// getimgsize($img)
+//
+// Parameters:      img     - filename to get size information from.  this can be
+//                            a local filename or a url.
+//
+
+function getimgsize($img) {
+    include "imgsize.class";
+    $im = new ImgSize($img);
+
+    $x = $im->width;
+    $y = $im->height;
+    if ($x != -1 && $y != -1)
+        print "$im->type image is $x"."x$y.<BR>";
+    else
+        print "Error: {$im->ERROR}";
+
+
+    print "<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\">\n";
+    print "<!--\n";
+    print "function setimgsize() { eval('w = opener.document.editad.width');\n";
+	print "eval('h = opener.document.editad.height');w.value = '$x';\n";
+    print "h.value = '$y';window.close('getimagesize');return false;}\n";
+    print "//--></SCRIPT>\n";
+
+    print "<DIV ALIGN=\"CENTER\">\n";
+    print "<FORM NAME=\"imgsize\" ONSUBMIT=\"return setimgsize();\">\n";
+    if (empty($im->ERROR))
+        print "<INPUT TYPE=\"BUTTON\" VALUE=\"Update\" onClick=\"return setimgsize();\">\n";
+    else
+        print "<INPUT TYPE=\"BUTTON\" VALUE=\"Close\" onClick=\"return window.close('getimagesize');\">\n";
+    print "</FORM></DIV>\n";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// colsort($fld,$cur) - helps facilitate sorting tables by column
+//
+// Parameters:      fld     - Field to sort by
+//                  cur     - Current sort field
+//
+
+function colsort($fld,$cur) {
+    if ($fld == $cur) { $d = "+DESC"; }
+    return "$fld$d";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// issel($a,$b) - determines whether an <OPTION> is selected
+//
+// Parameters:      a       - Field 1
+//                  b       - Field 2
+//
+
+function issel($a,$b) {
+    if ($a == $b) print "SELECTED";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// ischk($a,$b) - determines whether an checkbox is selected
+//
+// Parameters:      a       - Field 1
+//                  b       - Field 2
+//
+
+function ischk($a,$b) {
+    if (stristr($b,$a)) print "CHECKED";
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// buildhc() - rebuild hit/click counters from log database
+//
+// Parameters:      None
+//
+
+function buildhc() {
+    global $ads,$sd,$B1,$ad_localhosts;
+
+    ad_connect_db();
+
+    // Process if $B1 variable is set
+    if (!empty($B1)) {
+        if ($B1 == "Cancel") { $view = ""; include "admin.ph"; return; }
+
+        // Build localhost exclusion clause
+        $excl = "";
+        $ct = 0;
+        while ($ct < count($ad_localhosts)) {
+            $excl .= "and remotehost not like '%$ad_localhosts[$ct]%' ";
+            $excl .= "and remoteaddr not like '%$ad_localhosts[$ct]%' ";
+            $ct++;
+        }
+
+        // Build adid where clause
+        $idcl = "";
+        $ct = 0;
+        while ($ct < count($ads)) {
+            if (!empty($ads[$ct])) {
+                if (!empty($idcl)) $idcl .= " and ";
+                $idcl .= "adid = '$ads[$ct]'";
+            }
+            $ct++;
+        }
+
+        print "<br><div align=\"left\">\n";
+
+        if (empty($idcl))
+            $qh = ad_query("select * from ads");
+        else
+            $qh = ad_query("select * from ads where $idcl");
+        $nr = ad_queryrows($qh);
+        $ct = 0;
+        while ($ct < $nr) {
+            $ad = ad_fetch($qh);
+
+            print "Processing $ad[title]: \n";
+
+            // build query
+            $iq = "select type from adlog where adid = '$ad[adid]' ";
+            if (!empty($sd)) $iq .= "and entrydate >= '$sd' ";
+            if (!empty($excl)) $iq .= $excl;
+
+            $qhb = ad_query($iq);
+            $nrb = ad_queryrows($qhb);
+            $ctb = $hc = $cc = 0;
+            while ($ctb < $nrb) {
+                $lg = ad_fetch($qhb);
+                if ($lg[type] == 'hit') $hc++;
+                elseif ($lg[type] == 'click') $cc++;
+                $ctb++;
+            }
+
+            print "$hc HITS  $cc CLICKS<br>\n";
+            flush();
+
+            // update ads database
+            $qhb = ad_query("update ads set hits = '$hc', clicks = '$cc' where ".
+                "adid = '$ad[adid]'");
+
+            $ct++;
+        }
+        print "<FORM METHOD=\"GET\" ACTION=\"admin.ph\"><INPUT TYPE=\"SUBMIT\" VALUE=\"Main Menu\"></FORM>\n";
+        print "</DIV>\n";
+        return;
+    }
+
+    showdoconfirm();
+
+    print "<CENTER><B>Rebuild Hit/Click Counts</B><P></P>\n";
+?>
+
+<form method="POST" action="admin.ph">
+<input type="hidden" name="view" value="buildhc">
+<table width="600" border="0" cellspacing="1" cellpadding="1" class="edit">
+<tr>
+	<td class="desc">Ad Item</td>
+	<td><?php listads(); ?></td>
+</tr>
+<tr>
+	<td class="desc">From Date</td>
+	<td><input type="text" name="sd" size="20">
+	<font class="small"><i>2001-01-01 12:00:00</i></font></td>
+</tr>
+<tr>
+	<td colspan="2" align="center">
+		<input type="submit" value="Update" name="B1" onClick="return doConfirm()"> <input type="submit" value="Cancel" name="B1">
+	</td>
+</tr>
+</table>
+</form>
+<?
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// optdb() - optimizes databases
+//
+// Parameters:      None
+//
+
+function optdb() {
+    ad_connect_db();
+
+    print "<CENTER><B>Optimize Databases</B><P></P>\n";
+
+    ad_query("optimize table ads");
+    //ad_query("optimize table adgroups");
+    ad_query("optimize table domains");
+    ad_query("optimize table adlog");
+    //query("optimize table users");
+
+    print "<p>Optimization Complete</p>\n";
+
+    print "<FORM METHOD=\"GET\" ACTION=\"admin.ph\"><INPUT TYPE=\"SUBMIT\" VALUE=\"Main Menu\"></FORM>\n";
+}
+
+
+function showdoconfirm() {
+    print "<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\">\n<!--\n";
+    print "function doConfirm() { if (confirm(\"Are you sure?\")) { return true;";
+    print "} else { return false; } } //-->\n";
+    print "</SCRIPT>\n";
+}
+
+
+
+?>

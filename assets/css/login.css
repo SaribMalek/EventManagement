@@ -1,0 +1,81 @@
+body{
+	margin: 0;
+	padding: 0;
+	background-color: #4cb7ff;
+}
+.content{
+	height: 380px;
+    width: 32%;
+    margin: 100px auto;
+    border: 1px  solid #E0E0E0;
+    background-color: white;
+}
+
+.header-content{
+	text-align: center;
+	font-family: Arial;
+}
+
+.text-content{
+	margin: 20px;
+	margin-top: 0;
+	padding-left: 20px;
+	padding-right: 20px;
+	/*padding: 20px;*/
+}
+
+.text-content span{
+	margin-bottom: 20px;
+	font-size: 18px;
+}
+
+.text-content input[type='text'], input[type='password']{
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 15px;
+	padding: 5px;
+	margin-bottom: 10px;
+	border-radius: 3px;
+	border: 1px solid #E0E0E0;
+}
+
+.text-content .select{
+	width: 100%;
+	font-size: 15px;
+	padding: 5px;
+	background-color: white;
+	border-radius: 3px;
+	border: 1px solid #E0E0E0;
+}
+
+.text-content input[type='submit']{
+	box-sizing: border-box;
+	width: 100%;
+	font-size: 18px;
+	padding: 5px;
+	background: #4cb7ff;
+	border-radius: 3px;
+	border: 1px solid #47abef;
+	color: #FFF;
+}
+
+.text-content input[type='submit']:hover{
+	background: #82CAFF;
+}
+
+.forgot-pass{
+	padding-top: 20px;
+}
+
+.text-content .sign-up{
+	padding-top: 10px;
+	font-size: 17px;
+}
+
+
+
+@media only screen (max-width: 600px){
+	.content{
+		width: 100%;
+	}
+}
